@@ -29,14 +29,9 @@ module.exports = {
 
 		routes: [
 			{
-				path: "/api",
-				
-			},
-			{
 				path: "/api/survey",
 				aliases: {
-					"GET :survey_id": "survey.getById",
-
+					"GET :survey_id": "survey.getById"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {

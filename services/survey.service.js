@@ -7,7 +7,7 @@ module.exports = {
   name: "survey",
   mixins: [DbService],
   adapter: new MongoDBAdapter(process.env.MONGO_URI),
-  collection: "survey",
+  collection: "surveys",
 
 	/**
 	 * Service settings
@@ -27,16 +27,13 @@ module.exports = {
 	actions: {
 
 		/**
-		 * Say a 'Hello'
+		 * 
 		 *
 		 * @returns
 		 */
 		getById: {
-      params: {
-
-      },
-      async handler() {
-        const survey = await this.adapter.find({email: "demo@demo.com"})
+      async handler(ctx) {
+        const survey = await this.getById(ctx.params.survey_id)
         return survey
       }
       

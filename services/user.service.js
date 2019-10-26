@@ -1,7 +1,13 @@
 "use strict";
 
+const DbService = require("moleculer-db");
+const MongoDBAdapter = require("moleculer-db-adapter-mongo");
+
 module.exports = {
-	name: "user",
+  name: "user",
+  mixins: [DbService],
+  adapter: new MongoDBAdapter(process.env.MONGO_URI),
+  collection: "users",
 
 	/**
 	 * Service settings
@@ -25,8 +31,10 @@ module.exports = {
 		 *
 		 * @returns
 		 */
-		hello() {
-			return "Hello Moleculer";
+		async hello() {
+      
+      await this.adapter.create({email: "demo@demo.com"})
+      return "Hello Moleculer";
 		},
 
 		/**

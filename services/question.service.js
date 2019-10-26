@@ -96,7 +96,6 @@ module.exports = {
 	methods: {
 		async checkSurveyAccess(ctx, surveyId) {
 			const survey = await ctx.call("survey.getById", {survey_id: surveyId});
-			console.log(survey);
 
 			const { meta: {user: {userId}} } = ctx;
 			if (userId !== survey.userId) {

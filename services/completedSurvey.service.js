@@ -25,6 +25,10 @@ module.exports = {
     actions: {
 
         create: {
+            params: {
+                answers: "array",
+                survey_id: "string"
+            },
             async handler(ctx) {
                 const {survey_id, answers, comment, respondentClientId} = ctx.params
                 const new_completedSurvey = await this.adapter.insert({
@@ -32,7 +36,7 @@ module.exports = {
                     respondentClientId,
                     comment
                 })
-                ctx.call('answers.saveAnswers', {
+                await ctx.call('answers.saveAnswers', {
                     completedSurvey_id: new_completedSurvey._id,
                     survey_id,
                     answers

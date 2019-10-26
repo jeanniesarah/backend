@@ -25,10 +25,20 @@ module.exports = {
     actions: {
 
         saveAnswers: {
+            params: {
+                answers: 'array'
+            },
             async handler(ctx) {
-                const {completedSurvey_id, survey_id, answers} = ctx.params
+                const {survey_id, answers, completedSurvey_id} = ctx.params
                 for (let answer of answers) {
-                    await this.adapter.insert({survey_id, completedSurvey_id, ...answer})
+                    const {id, text, value} = answer;
+                    await this.adapter.insert({
+                        surveyId: survey_id,
+                        completedSurveyId: completedSurvey_id,
+                        questionId: id,
+                        text,
+                        value,
+                    });
                 }
 
             }

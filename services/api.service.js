@@ -1,6 +1,8 @@
 "use strict";
 
 const ApiGateway = require("moleculer-web");
+const E = require("moleculer-web").Errors;
+const _ = require("lodash");
 
 module.exports = {
 	name: "api",
@@ -35,7 +37,7 @@ module.exports = {
 					"POST login": "user.login",
 					"POST password-recover": "user.recoverPassword",
 					"GET regconfirm/:code": "user.confirmRegistration",
-					"GET recovery/:token": "user.passwordChangeConfirm",
+					"GET passwordChange/:token": "user.passwordChangeConfirm",
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {
@@ -56,15 +58,27 @@ module.exports = {
 				}
 			},
 			{
+				path: "/api/admin/",
+				authorization: true,
+				aliases: {
+					"GET me": "user.me",
+				},
+				mappingPolicy: "restrict",
+				bodyParsers: {
+					json: true,
+					urlencoded: { extended: true }
+				}
+			},
+			{
 				path: "/api/admin/survey",
 				authorization: true,
 				aliases: {
 					"POST ": "survey.createSurvey",
-                    "GET :survey_id/question": "question.getBySurveyId",
-                    "PATCH :survey_id/question/:question_id": "question.update",
-                    "DELETE :survey_id/question/:question_id": "question.delete",
+					"GET :survey_id/question": "question.getBySurveyId",
+					"PATCH :survey_id/question/:question_id": "question.update",
+					"DELETE :survey_id/question/:question_id": "question.delete",
 					"POST :survey_id/question": "question.create",
-                    "GET ": "survey.getList"
+					"GET ": "survey.getList"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {
@@ -82,7 +96,7 @@ module.exports = {
 	methods: {
 		async authorize (ctx, route, req) {
 			console.log("authorize");
-			/* let token;
+			let token;
 			if (!req.headers.authorization) {
 				throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
 			}
@@ -104,12 +118,9 @@ module.exports = {
 				throw new E.ForbiddenError();
 			}
 	
-			ctx.meta.user = _.pick(user, ["uuid", "username", "email", "role"]);
-	 */
+			ctx.meta.user = _.pick(user, ["_id", "email", "role"]);
 	
-			ctx.meta.user = {
-				userId: "5db4215c0052ea8301833786"
-			};
+
 		}
 	}
 	

@@ -21,13 +21,37 @@ let transporter = nodemailer.createTransport({
 module.exports = {
 	name: "mail",
 	actions: {
-		async sendConfirmaitionLink({to, link}) {
+		async sendConfirmaitionLink(ctx) {
+			const {to, link} = ctx.params;
+			this.logger.info({to, link});
 			await transporter.sendMail({
 				from: from_email, // sender address
 				to: to, // list of receivers
 				subject: "Registration confirmation", // Subject line
-				text: "", // plain text body
-				html: "<b>link?</b>" // html body
+				//text: "", // plain text body
+				html: `${link}`// html body
+			});
+		},
+		async sendPasswordRecoveryToken(ctx) {
+			const {to, link} = ctx.params;
+			this.logger.info({to, link});
+			await transporter.sendMail({
+				from: from_email, // sender address
+				to: to, // list of receivers
+				subject: "Password recovery", // Subject line
+				//text: "", // plain text body
+				html: `${link}`// html body
+			});
+		},
+		async sendNewPassword(ctx) {
+			const {to, password} = ctx.params;
+			this.logger.info({to, password});
+			await transporter.sendMail({
+				from: from_email, // sender address
+				to: to, // list of receivers
+				subject: "New temporary password", // Subject line
+				//text: "", // plain text body
+				html: `Your tmp password: ${password} <br/>`// html body
 			});
 		}
 	}

@@ -99,7 +99,6 @@ module.exports = {
 			console.log(survey);
 
 			const { meta: {user: {userId}} } = ctx;
-			// TODO validation
 			if (userId !== survey.userId) {
 				throw new MoleculerClientError("Forbidden", 403, "Error");
 			}

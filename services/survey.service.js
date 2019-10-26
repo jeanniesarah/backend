@@ -30,8 +30,17 @@ module.exports = {
          */
         getById: {
             async handler(ctx) {
-                const survey = await this.getById(ctx.params.survey_id);
-                return survey;
+							const {survey_id} = ctx.params;
+							const survey = await this.getById(survey_id);
+							const questions = await ctx.call('question.getBySurveyId', {survey_id});
+							console.log(questions);
+							return {
+								...survey,
+								questions: questions.map(({_id, text}) => ({
+									id: _id,
+									text,
+								})),
+							};
             }
         },
         createSurvey: {

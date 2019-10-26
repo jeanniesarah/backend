@@ -30,7 +30,6 @@ module.exports = {
 			},
 			async handler(ctx) {
 				const { survey_id } = ctx.params;
-				await this.checkSurveyAccess(ctx, survey_id);
 				return await this.adapter.find({
 					surveyId: survey_id,
 					deletedAt: {"$exists": false},

@@ -39,6 +39,18 @@ module.exports = {
 					json: true,
 					urlencoded: { extended: true }
 				}
+			},
+			{
+				path: "/api/admin/survey",
+				aliases: {
+					"POST ": "survey.createSurvey",
+					"POST :survey_id/question": "question.create"
+				},
+				mappingPolicy: "restrict",
+				bodyParsers: {
+					json: true,
+					urlencoded: { extended: true }
+				}
 			}
 	],
 

@@ -25,14 +25,6 @@ module.exports = {
 	 * Actions
 	 */
 	actions: {
-
-		hello: {
-			async handler(ctx) {
-				const {text} = ctx.params
-				const tmp = this.testmethod()
-				return 'hello ' + tmp
-			}
-		},
 		/**
 		 * GET survej json from db by _id
 		 *
@@ -44,22 +36,34 @@ module.exports = {
         return survey
       }
 		},
+		createSurvey: {
+			params: {
+				name: "string",
+				title: "string"
+			},
+			async handler(ctx) {
+				const {name, title} = ctx.params
+				const new_survey = await this.adapter.insert({
+					name,
+					title
+				})
+				return new_survey
+			}
+		}
 	},
 
 	/**
 	 * Events
 	 */
 	events: {
-
+		
 	},
 
 	/**
 	 * Methods
 	 */
 	methods: {
-		testmethod() {
-			return 'testmethod'
-		}
+	
 	},
 
 	/**

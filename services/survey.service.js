@@ -26,6 +26,13 @@ module.exports = {
 	 */
 	actions: {
 
+		hello: {
+			async handler(ctx) {
+				const {text} = ctx.params
+				const tmp = this.testmethod()
+				return 'hello ' + tmp
+			}
+		},
 		/**
 		 * GET survej json from db by _id
 		 *
@@ -50,7 +57,9 @@ module.exports = {
 	 * Methods
 	 */
 	methods: {
-
+		testmethod() {
+			return 'testmethod'
+		}
 	},
 
 	/**

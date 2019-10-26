@@ -10,7 +10,7 @@ module.exports = {
 	settings: {
 		port: process.env.PORT || 3000,
 		cors: {
-			origin: process.env.DEV ? "*" : ["http://localhost:8080"],
+			origin: '*',
 			methods: ["OPTIONS", "GET", "POST", "PUT", "DELETE"],
 			allowedHeaders: ["Origin", "X-Requested-With", "Accept", "Content-Type", "Authorization"],
 			exposedHeaders: ["Authorization"],

@@ -10,7 +10,7 @@ module.exports = {
 	settings: {
 		port: process.env.PORT || 3000,
 		cors: {
-			origin: '*',
+			origin: "*",
 			methods: ["OPTIONS", "GET", "POST", "PUT", "DELETE"],
 			allowedHeaders: ["Origin", "X-Requested-With", "Accept", "Content-Type", "Authorization"],
 			exposedHeaders: ["Authorization"],
@@ -28,6 +28,21 @@ module.exports = {
 		path: "/",
 
 		routes: [
+			{
+				path: "/api/auth",
+				aliases: {
+					"POST register": "user.register",
+					"POST login": "user.login",
+					"POST password-recover": "user.recoverPassword",
+					"GET regconfirm/:code": "user.confirmRegistration",
+					"GET recovery/:token": "user.passwordChangeConfirm",
+				},
+				mappingPolicy: "restrict",
+				bodyParsers: {
+					json: true,
+					urlencoded: { extended: true }
+				}
+			},
 			{
 				path: "/api/survey",
 				aliases: {
@@ -52,7 +67,7 @@ module.exports = {
 					urlencoded: { extended: true }
 				}
 			}
-	],
+		],
 
 		// Serve assets from "public" folder
 		assets: {

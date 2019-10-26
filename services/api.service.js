@@ -60,7 +60,8 @@ module.exports = {
 				authorization: true,
 				aliases: {
 					"POST ": "survey.createSurvey",
-					"POST :survey_id/question": "question.create"
+					"POST :survey_id/question": "question.create",
+					"GET ": "survey.getList"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {

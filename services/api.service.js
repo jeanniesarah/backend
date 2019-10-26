@@ -32,7 +32,7 @@ module.exports = {
 				path: "/api/survey",
 				aliases: {
 					"GET :survey_id": "survey.getById",
-					"POST :survey_id": "answers.saveAnswers"
+					"POST :survey_id": "completedSurvey.create"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {

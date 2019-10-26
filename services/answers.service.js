@@ -4,10 +4,10 @@ const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 
 module.exports = {
-  name: "survey",
+  name: "answers",
   mixins: [DbService],
   adapter: new MongoDBAdapter(process.env.MONGO_URI),
-  collection: "surveys",
+  collection: "answers",
 
 	/**
 	 * Service settings
@@ -26,17 +26,24 @@ module.exports = {
 	 */
 	actions: {
 
-		/**
-		 * GET survej json from db by _id
-		 *
-		 * @returns 
-		 */
-		getById: {
-      async handler(ctx) {
-        const survey = await this.getById(ctx.params.survey_id)
-        return survey
+    saveAnswers: {
+      /* params: {
+        answers: {
+          type: "array",
+          items: {
+            type: "object", props: {
+                id: { type: "number", positive: true },
+                name: { type: "string", empty: false },
+                status: "boolean"
+            }
+        }
       }
-		},
+    } */
+      async handler(ctx) {
+        const {survey_id, answers} = ctx.params
+        await this.adapter.insert({survey_id, answers})
+      }
+    }
 	},
 
 	/**

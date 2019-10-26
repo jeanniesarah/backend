@@ -26,14 +26,25 @@ module.exports = {
 		etag: true,
 
 		path: "/",
-		
-		routes: [{
-			path: "/api",
-			whitelist: [
-				// Access to any actions in all services under "/api" URL
-				"**"
-			]
-		}],
+
+		routes: [
+			{
+				path: "/api",
+				
+			},
+			{
+				path: "/api/survey",
+				aliases: {
+					"GET :survey_id": "survey.getById",
+
+				},
+				mappingPolicy: "restrict",
+				bodyParsers: {
+					json: true,
+					urlencoded: { extended: true }
+				}
+			}
+	],
 
 		// Serve assets from "public" folder
 		assets: {

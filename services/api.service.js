@@ -57,6 +57,7 @@ module.exports = {
 			},
 			{
 				path: "/api/admin/survey",
+				authorization: true,
 				aliases: {
 					"POST ": "survey.createSurvey",
 					"POST :survey_id/question": "question.create"
@@ -73,5 +74,39 @@ module.exports = {
 		assets: {
 			folder: "public"
 		}
+	},
+	methods: {
+		async authorize (ctx, route, req) {
+			console.log("authorize");
+			/* let token;
+			if (!req.headers.authorization) {
+				throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
+			}
+	
+			let type = req.headers.authorization.split(" ")[0];
+			if (type !== "Bearer") {
+				throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
+			}
+	
+			token = req.headers.authorization.split(" ")[1];
+			ctx.meta.token = token;
+	
+			const user = await ctx.call("user.resolveToken", { token });
+			if (!user) {
+				throw new E.UnAuthorizedError(E.ERR_INVALID_TOKEN);
+			}
+	
+			if (route.opts.roles && !route.opts.roles.includes(user.role)) {
+				throw new E.ForbiddenError();
+			}
+	
+			ctx.meta.user = _.pick(user, ["uuid", "username", "email", "role"]);
+	 */
+	
+			ctx.meta.user = {
+				userId: "5db4215c0052ea8301833786"
+			};
+		}
 	}
+	
 };

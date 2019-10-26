@@ -42,10 +42,12 @@ module.exports = {
 				title: "string"
 			},
 			async handler(ctx) {
+				this.logger.info({userId: ctx.meta.user.userId});
 				const {name, title} = ctx.params;
 				const new_survey = await this.adapter.insert({
 					name,
-					title
+					title,
+					userId: ctx.meta.user.userId
 				});
 				return new_survey;
 			}

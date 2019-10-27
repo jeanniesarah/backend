@@ -109,7 +109,6 @@ module.exports = {
         createTemplate: {
             async handler(ctx) {
                 const {survey_id} = ctx.params
-                await ctx.call("survey.checkSurveyAccess", {survey_id})
                 const questions = await ctx.call("question.getBySurveyId", {survey_id})
                 const newSurvey = await ctx.call("survey.create", {title: "Cloned survey"})
                 const newSurveyId = newSurvey._id

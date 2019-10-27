@@ -2,7 +2,6 @@
 
 const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
-const { MoleculerClientError } = require("moleculer").Errors;
 
 module.exports = {
 	name: "question",

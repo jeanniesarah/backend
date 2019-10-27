@@ -69,6 +69,7 @@ module.exports = {
 					"PATCH survey/:survey_id/question/:question_id": "question.update",
 					"DELETE survey/:survey_id/question/:question_id": "question.delete",
 					"POST survey/:survey_id/question": "question.create",
+					"PATCH survey/:survey_id": "survey.updateSurvey"
 				
 				},
 				mappingPolicy: "restrict",

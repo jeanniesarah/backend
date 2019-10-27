@@ -70,7 +70,7 @@ module.exports = {
                 const surveys = await ctx.call('survey.find', {
 					query: {
 					    userId: ctx.meta.user._id,
-                        createdAt: {$exists: false},
+                        deletedAt: {$exists: false},
                     },
                     fields: ["_id", "title"]
                 });

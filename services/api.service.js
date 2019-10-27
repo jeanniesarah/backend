@@ -58,27 +58,17 @@ module.exports = {
 				}
 			},
 			{
-				path: "/api/admin/",
+				path: "/api/admin",
 				authorization: true,
 				aliases: {
 					"GET me": "user.me",
-				},
-				mappingPolicy: "restrict",
-				bodyParsers: {
-					json: true,
-					urlencoded: { extended: true }
-				}
-			},
-			{
-				path: "/api/admin/survey",
-				authorization: true,
-				aliases: {
-					"POST ": "survey.createSurvey",
-					"GET :survey_id/question": "question.getBySurveyId",
-					"PATCH :survey_id/question/:question_id": "question.update",
-					"DELETE :survey_id/question/:question_id": "question.delete",
-					"POST :survey_id/question": "question.create",
-					"GET ": "survey.getList"
+					"GET survey": "survey.getList",
+					"POST survey": "survey.createSurvey",
+					"GET survey/:survey_id/question": "question.getBySurveyId",
+					"PATCH survey/:survey_id/question/:question_id": "question.update",
+					"DELETE survey/:survey_id/question/:question_id": "question.delete",
+					"POST survey/:survey_id/question": "question.create",
+				
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {
@@ -95,7 +85,6 @@ module.exports = {
 	},
 	methods: {
 		async authorize (ctx, route, req) {
-			console.log("authorize");
 			let token;
 			if (!req.headers.authorization) {
 				throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);

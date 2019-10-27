@@ -4,76 +4,76 @@ const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 
 module.exports = {
-    name: "answers",
-    mixins: [DbService],
-    adapter: new MongoDBAdapter(process.env.MONGO_URI),
-    collection: "answers",
+	name: "answers",
+	mixins: [DbService],
+	adapter: new MongoDBAdapter(process.env.MONGO_URI),
+	collection: "answers",
 
-    /**
+	/**
      * Service settings
      */
-    settings: {},
+	settings: {},
 
-    /**
+	/**
      * Service dependencies
      */
-    dependencies: [],
+	dependencies: [],
 
-    /**
+	/**
      * Actions
      */
-    actions: {
+	actions: {
 
-        saveAnswers: {
-            params: {
-                answers: 'array'
-            },
-            async handler(ctx) {
-                const {survey_id, answers, completedSurvey_id} = ctx.params
-                for (let answer of answers) {
-                    const {id, text, value} = answer;
-                    await this.adapter.insert({
-                        surveyId: survey_id,
-                        completedSurveyId: completedSurvey_id,
-                        questionId: id,
-                        text,
-                        value,
-                    });
-                }
+		saveAnswers: {
+			params: {
+				answers: "array"
+			},
+			async handler(ctx) {
+				const {survey_id, answers, completedSurvey_id} = ctx.params;
+				for (let answer of answers) {
+					const {id, text, value} = answer;
+					await this.adapter.insert({
+						surveyId: survey_id,
+						completedSurveyId: completedSurvey_id,
+						questionId: id,
+						text,
+						value,
+					});
+				}
 
-            }
-        }
+			}
+		}
 
-    },
+	},
 
-    /**
+	/**
      * Events
      */
-    events: {},
+	events: {},
 
-    /**
+	/**
      * Methods
      */
-    methods: {},
+	methods: {},
 
-    /**
+	/**
      * Service created lifecycle event handler
      */
-    created() {
+	created() {
 
-    },
+	},
 
-    /**
+	/**
      * Service started lifecycle event handler
      */
-    started() {
+	started() {
 
-    },
+	},
 
-    /**
+	/**
      * Service stopped lifecycle event handler
      */
-    stopped() {
+	stopped() {
 
-    }
+	}
 };

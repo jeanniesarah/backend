@@ -96,8 +96,8 @@ module.exports = {
 		async checkSurveyAccess(ctx, surveyId) {
 			const survey = await ctx.call("survey.getById", {survey_id: surveyId});
 
-			const { meta: {user: {userId}} } = ctx;
-			if (userId !== survey.userId) {
+			const { meta: {user: {_id}} } = ctx;
+			if (_id !== survey.userId) {
 				throw new MoleculerClientError("Forbidden", 403, "Error");
 			}
 		}

@@ -49,23 +49,23 @@ module.exports = {
                 title: "string"
             },
             async handler(ctx) {
-                this.logger.info({userId: ctx.meta.user.userId});
                 const {name, title} = ctx.params;
+                this.logger.info(ctx.meta.user)
                 const new_survey = await this.adapter.insert({
                     name,
                     title,
-                    userId: ctx.meta.user.userId
+                    userId: ctx.meta.user._id
                 });
                 return new_survey;
             }
         },
         getList: {
             async handler(ctx) {
-                const new_survey_list = await this.adapter.find({
-					query: {userId: ctx.meta.user.userId}
-					// fields: ["_id", "name", "userID"]
+                const surveys = await ctx.call('survey.find', {
+					query: {userId: ctx.meta.user._id},
+					fields: ["_id", "name"]
                 });
-                return new_survey_list;
+                return surveys;
             }
         }
     },

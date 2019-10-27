@@ -29,9 +29,11 @@ module.exports = {
 			},
 			async handler(ctx) {
 				const { survey_id } = ctx.params;
-				return await this.adapter.find({
-					surveyId: survey_id,
-					deletedAt: {"$exists": false},
+				return await ctx.call("question.find", {
+					query: {
+						surveyId: survey_id,
+						deletedAt: {$exists: false},
+					}
 				});
 			}
 		},

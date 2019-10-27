@@ -5,10 +5,10 @@ const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 const uuid = require("uuid");
 
 module.exports = {
-	name: "completedSurvey",
+	name: "stat",
 	mixins: [DbService],
 	adapter: new MongoDBAdapter(process.env.MONGO_URI),
-	collection: "completedSurvey",
+	collection: "stats",
 
 	/**
      * Service settings
@@ -24,37 +24,27 @@ module.exports = {
      * Actions
      */
 	actions: {
-
-		create: {
-			params: {
-				answers: "array",
-				survey_id: "string"
-			},
-			async handler(ctx) {
-				const {survey_id, answers, comment } = ctx.params;
-				const completedSurvey = await this.adapter.insert({
-					survey_id,
-					respondentUuid: uuid(),
-					comment,
-					createdAt: new Date(Date.now())
-				});
-				await ctx.call("answers.saveAnswers", {
-					completedSurvey_id: completedSurvey._id,
-					survey_id,
-					answers
-				});
-			}
-		},
-		getForSurvey: {
+		table: {
 			async handler(ctx) {
 				const {survey_id} = ctx.params;
-				return await ctx.call("completedSurvey.find", {
-					query: {
-						survey_id: survey_id,
-					}
-				});
+				await ctx.call("survey.checkSurveyAccess", {survey_id});
+				const completedSurveys = await ctx.call("completedSurvey.getForSurvey", {survey_id});
+				const result = await Promise.all(completedSurveys.map(async (completedSurvey) => {
+          const answers = await ctx.call("answers.getForCompletedSurvey", {survey_id: completedSurvey._id});
+          return {...completedSurvey, ...answers}
+				}));
+				return result;
+			}
+		},
+		piechart: {
+			async handler(ctx) {
+				const {survey_id} = ctx.params;
+				await ctx.call("survey.checkSurveyAccess", {survey_id});
+				const responses = await ctx.call("completedSurvey.getForSurvey", {survey_id});
+				return responses;
 			}
 		}
+	
 
 	},
 

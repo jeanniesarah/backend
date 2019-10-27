@@ -69,7 +69,7 @@ module.exports = {
             async handler(ctx) {
                 const surveys = await ctx.call('survey.find', {
 					query: {userId: ctx.meta.user._id},
-					fields: ["_id", "name"]
+					fields: ["_id", "title"]
                 });
                 return surveys;
             }

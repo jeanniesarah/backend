@@ -2,7 +2,6 @@
 
 const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
-const { MoleculerClientError } = require("moleculer").Errors;
 
 module.exports = {
 	name: "question",
@@ -43,7 +42,7 @@ module.exports = {
 			},
 			async handler(ctx) {
 				const {survey_id, text} = ctx.params;
-				await this.checkSurveyAccess(ctx, survey_id);
+				await ctx.call("survey.checkSurveyAccess", {survey_id});
 				return await this.adapter.insert({
 					text,
 					surveyId: survey_id,

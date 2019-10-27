@@ -2,6 +2,7 @@
 
 const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
+const { MoleculerClientError } = require("moleculer").Errors;
 
 module.exports = {
     name: "survey",
@@ -77,10 +78,9 @@ module.exports = {
             }
         },
         async checkSurveyAccess(ctx) {
-			const survey = await ctx.call("survey.getById", {survey_id: ctx.params.survey_id});
-
+            const survey = await this.adapter.findById(ctx.params.survey_id)
 			const { meta: {user: {_id}} } = ctx;
-			if (_id !== survey.userId) {
+			if (String(_id) !== String(survey.userId)) {
 				throw new MoleculerClientError("Forbidden", 403, "Error");
 			}
 		}

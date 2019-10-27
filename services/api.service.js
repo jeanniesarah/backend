@@ -62,8 +62,8 @@ module.exports = {
 				authorization: true,
 				aliases: {
 					"GET me": "user.me",
-					"GET survey": "survey.getAdminSurvey",
-					"GET survey/:survey_id": "survey.getById",
+					"GET survey": "survey.getList",
+					"GET survey/:survey_id": "survey.getAdminSurvey",
 					"POST survey": "survey.createSurvey",
 					"GET survey/:survey_id/question": "question.getBySurveyId",
 					"PATCH survey/:survey_id/question/:question_id": "question.update",

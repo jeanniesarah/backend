@@ -77,13 +77,14 @@ module.exports = {
         async checkSurveyAccess(ctx) {
             const survey = await this.adapter.findById(ctx.params.survey_id)
 			const { meta: {user: {_id}} } = ctx;
-			if (String(_id) !== String(survey.userId)) {
+			if (!survey || String(_id) !== String(survey.userId)) {
 				throw new MoleculerClientError("Forbidden", 403, "Error");
 			}
 		},
         updateSurvey: {
             async handler(ctx) {
                 const {survey_id, title} = ctx.params;
+                await ctx.call("survey.checkSurveyAccess", {survey_id});
                 await this.adapter.updateById(survey_id, {
                     $set: {
                         title

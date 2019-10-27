@@ -51,7 +51,7 @@ module.exports = {
                 return survey;
             }
         },
-        createSurvey: {
+        create: {
             params: {
                 title: "string"
             },
@@ -104,6 +104,21 @@ module.exports = {
                         deletedAt: new Date()
                     }
                 });
+            }
+        },
+        createTemplate: {
+            async handler(ctx) {
+                const {survey_id} = ctx.params
+                await ctx.call("survey.checkSurveyAccess", {survey_id})
+                const questions = await ctx.call("question.getBySurveyId", {survey_id})
+                const newSurvey = await ctx.call("survey.create", {title: "Cloned survey"})
+                const newSurveyId = newSurvey._id
+
+                for (let question of questions) {
+                    let {text} = question
+                    await ctx.call('question.create', {survey_id: String(newSurveyId), text})
+                }
+
             }
         }
     },

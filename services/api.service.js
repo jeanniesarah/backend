@@ -64,14 +64,14 @@ module.exports = {
 					"GET me": "user.me",
 					"GET survey": "survey.getList",
 					"GET survey/:survey_id": "survey.getAdminSurvey",
-					"POST survey": "survey.createSurvey",
+					"POST survey": "survey.create",
 					"GET survey/:survey_id/question": "question.getBySurveyId",
 					"PATCH survey/:survey_id/question/:question_id": "question.update",
 					"DELETE survey/:survey_id/question/:question_id": "question.delete",
 					"POST survey/:survey_id/question": "question.create",
 					"PATCH survey/:survey_id": "survey.update",
-					"DELETE survey/:survey_id": "survey.delete"
-				
+					"DELETE survey/:survey_id": "survey.delete",
+					"GET templates/clone/:survey_id": "survey.createTemplate"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {

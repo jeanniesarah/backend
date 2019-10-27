@@ -2,78 +2,91 @@
 
 const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
+const uuid = require("uuid");
 
 module.exports = {
-    name: "completedSurvey",
-    mixins: [DbService],
-    adapter: new MongoDBAdapter(process.env.MONGO_URI),
-    collection: "completedSurvey",
+	name: "completedSurvey",
+	mixins: [DbService],
+	adapter: new MongoDBAdapter(process.env.MONGO_URI),
+	collection: "completedSurvey",
 
-    /**
+	/**
      * Service settings
      */
-    settings: {},
+	settings: {},
 
-    /**
+	/**
      * Service dependencies
      */
-    dependencies: [],
+	dependencies: [],
 
-    /**
+	/**
      * Actions
      */
-    actions: {
+	actions: {
 
-        create: {
-            params: {
-                answers: "array",
-                survey_id: "string"
-            },
-            async handler(ctx) {
-                const {survey_id, answers, comment, respondentClientId} = ctx.params
-                const new_completedSurvey = await this.adapter.insert({
-                    survey_id,
-                    respondentClientId,
-                    comment
-                })
-                await ctx.call('answers.saveAnswers', {
-                    completedSurvey_id: new_completedSurvey._id,
-                    survey_id,
-                    answers
-                });
-            }
-        }
+		create: {
+			params: {
+				answers: "array",
+				survey_id: "string"
+			},
+			async handler(ctx) {
+				const {survey_id, answers, comment } = ctx.params;
+				const completedSurvey = await this.adapter.insert({
+					survey_id,
+					respondentUuid: uuid(),
+					comment,
+					createdAt: new Date(Date.now())
+				});
+				await ctx.call("answers.saveAnswers", {
+					completedSurvey_id: completedSurvey._id,
+					survey_id,
+					answers
+				});
+			}
+		},
+		getForSurvey: {
+			async handler(ctx) {
+				const {survey_id} = ctx.params;
+				return await ctx.call("completedSurvey.find", {
+					query: {
+						survey_id: survey_id,
+					},
+					fields: ["_id", "respondentUuid", "comment", "createdAt"]
+				});
+			}
+		}
 
-    },
+	},
 
-    /**
+	/**
      * Events
      */
-    events: {},
+	events: {},
 
-    /**
+	/**
      * Methods
      */
-    methods: {},
+	methods: {},
 
-    /**
+	/**
      * Service created lifecycle event handler
      */
-    created() {
+	created() {
 
-    },
+	},
 
-    /**
+	/**
      * Service started lifecycle event handler
      */
-    started() {
+	started() {
 
-    },
+	},
 
-    /**
+	/**
      * Service stopped lifecycle event handler
      */
-    stopped() {
+	stopped() {
 
-    }
+	}
 };

@@ -13,7 +13,7 @@ module.exports = {
 		port: process.env.PORT || 3000,
 		cors: {
 			origin: "*",
-			methods: ["OPTIONS", "GET", "POST", "PUT", "DELETE"],
+			methods: ["OPTIONS", "GET", "POST", "PUT", "DELETE", "PATCH"],
 			allowedHeaders: ["Origin", "X-Requested-With", "Accept", "Content-Type", "Authorization"],
 			exposedHeaders: ["Authorization"],
 			// credentials: false,
@@ -71,7 +71,9 @@ module.exports = {
 					"POST survey/:survey_id/question": "question.create",
 					"PATCH survey/:survey_id": "survey.update",
 					"DELETE survey/:survey_id": "survey.delete",
-					"GET templates/clone/:survey_id": "survey.createTemplate"
+					"GET templates/clone/:survey_id": "survey.createTemplate",
+					"GET /stat/:survey_id/piechart": "stat.piechart",
+					"GET /stat/:survey_id/table": "stat.table"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {

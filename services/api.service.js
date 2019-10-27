@@ -69,7 +69,7 @@ module.exports = {
 					"PATCH survey/:survey_id/question/:question_id": "question.update",
 					"DELETE survey/:survey_id/question/:question_id": "question.delete",
 					"POST survey/:survey_id/question": "question.create",
-					"PATCH survey/:survey_id": "survey.updateSurvey",
+					"PATCH survey/:survey_id": "survey.update",
 
 					"GET /stat/:survey_id/piechart": "stat.piechart",
 					"GET /stat/:survey_id/table": "stat.table",

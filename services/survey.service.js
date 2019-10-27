@@ -34,7 +34,6 @@ module.exports = {
                 const {survey_id} = ctx.params;
                 const survey = await this.getById(survey_id);
                 const questions = await ctx.call('question.getBySurveyId', {survey_id});
-                console.log(questions);
                 return {
                     ...survey,
                     questions: questions.map(({_id, text}) => ({
@@ -48,7 +47,7 @@ module.exports = {
             async handler(ctx) {
                 const {survey_id} = ctx.params;
                 await ctx.call("survey.checkSurveyAccess", {survey_id});
-                const survey = await this.getById(survey_id);
+                const survey = await ctx.call('survey.getById', {survey_id})
                 return survey;
             }
         },

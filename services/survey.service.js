@@ -60,7 +60,7 @@ module.exports = {
                 const new_survey = await this.adapter.insert({
                     title,
                     userId: ctx.meta.user._id,
-                    timestamp: new Date(Date.now())
+                    createdAt: new Date()
                 });
                 return new_survey;
             }
@@ -68,8 +68,11 @@ module.exports = {
         getList: {
             async handler(ctx) {
                 const surveys = await ctx.call('survey.find', {
-					query: {userId: ctx.meta.user._id},
-					fields: ["_id", "name"]
+					query: {
+					    userId: ctx.meta.user._id,
+                        createdAt: {$exists: false},
+                    },
+                    fields: ["_id", "title"]
                 });
                 return surveys;
             }
@@ -98,7 +101,7 @@ module.exports = {
                 await ctx.call("survey.checkSurveyAccess", {survey_id});
                 await this.adapter.updateById(survey_id, {
                     $set: {
-                        deletedAt: new Date(Date.now())
+                        deletedAt: new Date()
                     }
                 });
             }

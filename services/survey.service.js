@@ -110,9 +110,9 @@ module.exports = {
             async handler(ctx) {
                 const {survey_id} = ctx.params
                 const questions = await ctx.call("question.getBySurveyId", {survey_id})
-                const newSurvey = await ctx.call("survey.create", {title: "Cloned survey"})
+                const survey = await this.adapter.findById(survey_id)
+                const newSurvey = await ctx.call("survey.create", {title: survey.title})
                 const newSurveyId = newSurvey._id
-
                 for (let question of questions) {
                     let {text} = question
                     await ctx.call('question.create', {survey_id: String(newSurveyId), text})

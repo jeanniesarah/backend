@@ -20,11 +20,11 @@ module.exports = {
 			maxAge: 3600,
 		},
 		// Rate limiter
-		rateLimit: {
+		/* 	rateLimit: {
 			window: 10 * 1000,
 			limit: 10,
 			headers: true
-		},
+		}, */
 		etag: true,
 
 		path: "/",

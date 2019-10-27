@@ -82,13 +82,24 @@ module.exports = {
 				throw new MoleculerClientError("Forbidden", 403, "Error");
 			}
 		},
-        updateSurvey: {
+        update: {
             async handler(ctx) {
                 const {survey_id, title} = ctx.params;
                 await ctx.call("survey.checkSurveyAccess", {survey_id});
                 await this.adapter.updateById(survey_id, {
                     $set: {
                         title
+                    }
+                });
+            }
+        },
+        delete: {
+            async handler(ctx) {
+                const {survey_id} = ctx.params;
+                await ctx.call("survey.checkSurveyAccess", {survey_id});
+                await this.adapter.updateById(survey_id, {
+                    $set: {
+                        deletedAt: new Date(Date.now())
                     }
                 });
             }

@@ -62,8 +62,21 @@ module.exports = {
 			async handler(ctx) {
 				const {survey_id} = ctx.params;
 				await ctx.call("survey.checkSurveyAccess", {survey_id});
-				const responses = await ctx.call("completedSurvey.getForSurvey", {survey_id});
-				return responses;
+        const questions = await ctx.call('question.getBySurveyId', {survey_id})
+        const chart = []
+        for (let question of questions) {
+          const yesCount = await ctx.call('answers.count', {
+            query: {
+              questionId: question._id
+            }
+          })
+          chart.push({
+            _id: question._id,
+            text: question.text,
+            yesCount
+          })
+        }
+        return chart
 			}
 		}
 	

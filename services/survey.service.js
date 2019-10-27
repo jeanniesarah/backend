@@ -54,16 +54,14 @@ module.exports = {
         },
         createSurvey: {
             params: {
-                name: "string",
                 title: "string"
             },
             async handler(ctx) {
-                const {name, title} = ctx.params;
-                this.logger.info(ctx.meta.user)
+                const {title} = ctx.params;
                 const new_survey = await this.adapter.insert({
-                    name,
                     title,
-                    userId: ctx.meta.user._id
+                    userId: ctx.meta.user._id,
+                    timestamp: new Date(Date.now())
                 });
                 return new_survey;
             }
@@ -83,7 +81,17 @@ module.exports = {
 			if (String(_id) !== String(survey.userId)) {
 				throw new MoleculerClientError("Forbidden", 403, "Error");
 			}
-		}
+		},
+        updateSurvey: {
+            async handler(ctx) {
+                const {survey_id, title} = ctx.params;
+                await this.adapter.updateById(survey_id, {
+                    $set: {
+                        title
+                    }
+                });
+            }
+        }
     },
 
     /**

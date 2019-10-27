@@ -68,16 +68,11 @@ module.exports = {
         getList: {
             async handler(ctx) {
                 const surveys = await ctx.call('survey.find', {
-<<<<<<< HEAD
-					query: {userId: ctx.meta.user._id},
-					fields: ["_id", "title"]
-=======
 					query: {
 					    userId: ctx.meta.user._id,
                         createdAt: {$exists: false},
                     },
                     fields: ["_id", "title"]
->>>>>>> 79402ed9d3685187c815081e54472ea1dd1411a0
                 });
                 return surveys;
             }

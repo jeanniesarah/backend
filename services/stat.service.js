@@ -31,7 +31,7 @@ module.exports = {
 				const completedSurveys = await ctx.call("completedSurvey.getForSurvey", {survey_id});
 				const result = await Promise.all(completedSurveys.map(async (completedSurvey) => {
           const answers = await ctx.call("answers.getForCompletedSurvey", {survey_id: completedSurvey._id});
-          return {...completedSurvey, ...answers}
+          return {...completedSurvey, ...{answers}}
 				}));
 				return result;
 			}

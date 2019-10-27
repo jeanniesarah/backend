@@ -27,13 +27,35 @@ module.exports = {
 		table: {
 			async handler(ctx) {
 				const {survey_id} = ctx.params;
-				await ctx.call("survey.checkSurveyAccess", {survey_id});
+        await ctx.call("survey.checkSurveyAccess", {survey_id});
+        const questions = await ctx.call('question.getBySurveyId', {survey_id})
 				const completedSurveys = await ctx.call("completedSurvey.getForSurvey", {survey_id});
-				const result = await Promise.all(completedSurveys.map(async (completedSurvey) => {
+        const results = []
+        console.log({completedSurveys})
+        for (let completedSurvey of completedSurveys) {
+          console.log({completedSurvey})
           const answers = await ctx.call("answers.getForCompletedSurvey", {survey_id: completedSurvey._id});
-          return {...completedSurvey, ...{answers}}
-				}));
-				return result;
+          results.push({...completedSurvey, ...{answers}})
+        }
+        console.log(results)
+        for (let result of results) {
+          const answers = questions.map(question => {
+            const answ = result.answers.find((answer) => String(answer.questionId) === String(question._id))
+            if (answ){
+              console.log(answ)
+              return answ.value
+            } else {
+              return null
+            } 
+          }) 
+          result.answers = answers
+        }
+       
+				return {
+          questions,
+          results,
+          //answers
+        };
 			}
 		},
 		piechart: {

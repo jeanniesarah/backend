@@ -33,7 +33,8 @@ module.exports = {
 					query: {
 						surveyId: survey_id,
 						deletedAt: {$exists: false},
-					}
+					},
+					fields: ["_id", "text"]
 				});
 			}
 		},

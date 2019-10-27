@@ -48,10 +48,11 @@ module.exports = {
 			async handler(ctx) {
 				const {survey_id} = ctx.params;
 				this.logger.info("getForCompletedSurvey", survey_id);
-				const answers = await this.adapter.find({
+				const answers = await ctx.call("answers.find", {
 					query: {
 						completedSurveyId: survey_id
-					}
+					},
+					fields: ["value", "questionId"]
 				});
 				this.logger.info({answers});
 				return  answers;

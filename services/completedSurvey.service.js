@@ -51,7 +51,8 @@ module.exports = {
 				return await ctx.call("completedSurvey.find", {
 					query: {
 						survey_id: survey_id,
-					}
+					},
+					fields: ["_id", "respondentUuid", "comment", "createdAt"]
 				});
 			}
 		}

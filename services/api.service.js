@@ -69,10 +69,15 @@ module.exports = {
 					"PATCH survey/:survey_id/question/:question_id": "question.update",
 					"DELETE survey/:survey_id/question/:question_id": "question.delete",
 					"POST survey/:survey_id/question": "question.create",
+<<<<<<< HEAD
 					"PATCH survey/:survey_id": "survey.updateSurvey",
 
 					"GET /stat/:survey_id/piechart": "stat.piechart",
 					"GET /stat/:survey_id/table": "stat.table"
+=======
+					"PATCH survey/:survey_id": "survey.update",
+					"DELETE survey/:survey_id": "survey.delete"
+>>>>>>> 79402ed9d3685187c815081e54472ea1dd1411a0
 				
 				},
 				mappingPolicy: "restrict",

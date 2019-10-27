@@ -60,7 +60,7 @@ module.exports = {
                 const new_survey = await this.adapter.insert({
                     title,
                     userId: ctx.meta.user._id,
-                    timestamp: new Date(Date.now())
+                    createdAt: new Date()
                 });
                 return new_survey;
             }
@@ -68,8 +68,16 @@ module.exports = {
         getList: {
             async handler(ctx) {
                 const surveys = await ctx.call('survey.find', {
+<<<<<<< HEAD
 					query: {userId: ctx.meta.user._id},
 					fields: ["_id", "title"]
+=======
+					query: {
+					    userId: ctx.meta.user._id,
+                        createdAt: {$exists: false},
+                    },
+                    fields: ["_id", "title"]
+>>>>>>> 79402ed9d3685187c815081e54472ea1dd1411a0
                 });
                 return surveys;
             }
@@ -81,13 +89,24 @@ module.exports = {
 				throw new MoleculerClientError("Forbidden", 403, "Error");
 			}
 		},
-        updateSurvey: {
+        update: {
             async handler(ctx) {
                 const {survey_id, title} = ctx.params;
                 await ctx.call("survey.checkSurveyAccess", {survey_id});
                 await this.adapter.updateById(survey_id, {
                     $set: {
                         title
+                    }
+                });
+            }
+        },
+        delete: {
+            async handler(ctx) {
+                const {survey_id} = ctx.params;
+                await ctx.call("survey.checkSurveyAccess", {survey_id});
+                await this.adapter.updateById(survey_id, {
+                    $set: {
+                        deletedAt: new Date()
                     }
                 });
             }

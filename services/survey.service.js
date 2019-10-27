@@ -30,17 +30,25 @@ module.exports = {
          */
         getById: {
             async handler(ctx) {
-							const {survey_id} = ctx.params;
-							const survey = await this.getById(survey_id);
-							const questions = await ctx.call('question.getBySurveyId', {survey_id});
-							console.log(questions);
-							return {
-								...survey,
-								questions: questions.map(({_id, text}) => ({
-									id: _id,
-									text,
-								})),
-							};
+                const {survey_id} = ctx.params;
+                const survey = await this.getById(survey_id);
+                const questions = await ctx.call('question.getBySurveyId', {survey_id});
+                console.log(questions);
+                return {
+                    ...survey,
+                    questions: questions.map(({_id, text}) => ({
+                        id: _id,
+                        text,
+                    })),
+                };
+            }
+        },
+        getAdminSurvey: {
+            async handler(ctx) {
+                const {survey_id} = ctx.params;
+                await ctx.call("survey.checkSurveyAccess", {survey_id});
+                const survey = await this.getById(survey_id);
+                return survey;
             }
         },
         createSurvey: {
@@ -67,7 +75,15 @@ module.exports = {
                 });
                 return surveys;
             }
-        }
+        },
+        async checkSurveyAccess(ctx) {
+			const survey = await ctx.call("survey.getById", {survey_id: ctx.params.survey_id});
+
+			const { meta: {user: {_id}} } = ctx;
+			if (_id !== survey.userId) {
+				throw new MoleculerClientError("Forbidden", 403, "Error");
+			}
+		}
     },
 
     /**

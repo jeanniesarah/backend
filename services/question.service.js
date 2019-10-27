@@ -58,7 +58,7 @@ module.exports = {
 			},
 			async handler(ctx) {
 				const { question_id, text, survey_id  } = ctx.params;
-				await this.checkSurveyAccess(ctx, survey_id);
+				await ctx.call("survey.checkSurveyAccess", {survey_id});
 				return await this.adapter.updateById(question_id, {
 					"$set": {
 						text: text,
@@ -74,7 +74,7 @@ module.exports = {
 			},
 			async handler(ctx) {
 				const { question_id, survey_id } = ctx.params;
-				await this.checkSurveyAccess(ctx, survey_id);
+				await ctx.call("survey.checkSurveyAccess", {survey_id});
 				return await this.adapter.updateById(question_id, {
 					"$set": {
 						deletedAt: new Date(),
@@ -93,14 +93,7 @@ module.exports = {
 	 * Methods
 	 */
 	methods: {
-		async checkSurveyAccess(ctx, surveyId) {
-			const survey = await ctx.call("survey.getById", {survey_id: surveyId});
-
-			const { meta: {user: {_id}} } = ctx;
-			if (_id !== survey.userId) {
-				throw new MoleculerClientError("Forbidden", 403, "Error");
-			}
-		}
+	
 	},
 
 	/**

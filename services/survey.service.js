@@ -117,6 +117,7 @@ module.exports = {
                     let {text} = question
                     await ctx.call('question.create', {survey_id: String(newSurveyId), text})
                 }
+                return newSurvey
 
             }
         }

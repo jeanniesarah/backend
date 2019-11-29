@@ -67,7 +67,8 @@ module.exports = {
         for (let question of questions) {
           const yesCount = await ctx.call('answers.count', {
             query: {
-              questionId: question._id
+              questionId: question._id,
+              value: true
             }
           })
           chart.push({

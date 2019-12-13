@@ -9,6 +9,7 @@ const E = require("moleculer-web").Errors;
 const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 const { MoleculerClientError } = require("moleculer").Errors;
+const _ = require("lodash");
 
 module.exports = {
 	name: "user",
@@ -52,7 +53,8 @@ module.exports = {
 					password: this.cryptPassword(password),
 					status: 0,
 					activationCode: emailConfirmationCode,
-					role: "customer"
+					role: "customer",
+					isPro: false
 				};
 
 				const user = await this.adapter.insert(new_user);
@@ -213,6 +215,34 @@ module.exports = {
 		me: {
 			async handler(ctx) {
 				return ctx.meta.user;
+			}
+		},
+		upgrade: {
+			async handler(ctx) {
+				const {user} = ctx.meta;
+				return await this.adapter.updateById(user._id, {
+					"$set": {
+						isPro: true
+					}
+				});
+			}
+		},
+		cancel: {
+			async handler(ctx) {
+				const {user} = ctx.meta;
+				return await this.adapter.updateById(user._id, {
+					"$set": {
+						isPro: false
+					}
+				});
+			}
+		},
+		getPro: {
+			async handler(ctx) {
+				const {user_id} = ctx.params;
+				const user = await this.adapter.getById(user_id);
+
+				return _.pick(user, ["isPro"]);
 			}
 		}
 	},

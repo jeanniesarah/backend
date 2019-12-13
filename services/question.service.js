@@ -34,7 +34,7 @@ module.exports = {
 						surveyId: survey_id,
 						deletedAt: {$exists: false},
 					},
-					fields: ["_id", "text"]
+					fields: ["_id", "text", "imageSrc"]
 				});
 			}
 		},
@@ -42,12 +42,14 @@ module.exports = {
 			params: {
 				survey_id: "string",
 				text: "string",
+				imageSrc: "string"
 			},
 			async handler(ctx) {
-				const {survey_id, text} = ctx.params;
+				const {survey_id, text, imageSrc} = ctx.params;
 				await ctx.call("survey.checkSurveyAccess", {survey_id});
 				return await this.adapter.insert({
 					text,
+					imageSrc,
 					surveyId: survey_id,
 					createdAt: new Date(),
 				});
@@ -57,13 +59,15 @@ module.exports = {
 			params: {
 				question_id: "string",
 				text: "string",
+				imageSrc: "string"
 			},
 			async handler(ctx) {
-				const { question_id, text, survey_id  } = ctx.params;
+				const { question_id, text, survey_id, imageSrc  } = ctx.params;
 				await ctx.call("survey.checkSurveyAccess", {survey_id});
 				return await this.adapter.updateById(question_id, {
 					"$set": {
 						text: text,
+						imageSrc,
 						updatedAt: new Date(),
 					}
 				});

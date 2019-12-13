@@ -34,6 +34,8 @@ module.exports = {
                 const {survey_id} = ctx.params;
                 const survey = await this.getById(survey_id);
                 const questions = await ctx.call('question.getBySurveyId', {survey_id});
+                const user = await ctx.call('user.getPro', {id: survey.userId})
+
                 return {
                     ...survey,
                     questions: questions.map(({_id, text}) => ({

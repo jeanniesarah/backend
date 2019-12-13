@@ -73,7 +73,9 @@ module.exports = {
 					"DELETE survey/:survey_id": "survey.delete",
 					"GET templates/clone/:survey_id": "survey.createTemplate",
 					"GET /stat/:survey_id/piechart": "stat.piechart",
-					"GET /stat/:survey_id/table": "stat.table"
+					"GET /stat/:survey_id/table": "stat.table",
+					"POST upgrade": "user.upgrade",
+					"POST cancel": "user.cancel"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {
@@ -112,7 +114,7 @@ module.exports = {
 				throw new E.ForbiddenError();
 			}
 	
-			ctx.meta.user = _.pick(user, ["_id", "email", "role"]);
+			ctx.meta.user = _.pick(user, ["_id", "email", "role", "isPro"]);
 	
 
 		}

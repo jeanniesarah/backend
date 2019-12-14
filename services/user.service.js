@@ -239,10 +239,14 @@ module.exports = {
 		},
 		getPro: {
 			async handler(ctx) {
+				console.log("get Pro");
 				const {user_id} = ctx.params;
+				console.log({user_id});
 				const user = await this.adapter.findById(user_id);
-
-				return _.pick(user, ["isPro"]);
+				console.log({user});
+				return {
+					isPro: user.isPro || false
+				};
 			}
 		}
 	},

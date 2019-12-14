@@ -1,7 +1,7 @@
 "use strict";
 
 if (process.env.NODE_ENV !== "production") {
-	require("dotenv").config('');
+	require("dotenv").config("");
 }
 
 /**
@@ -36,7 +36,7 @@ module.exports = {
 
 	// Define transporter. 
 	// More info: https://moleculer.services/docs/0.13/networking.html
-	transporter: "Redis",
+	//transporter: "Redis",
 
 	// Define a serializer. 
 	// Available values: "JSON", "Avro", "ProtoBuf", "MsgPack", "Notepack", "Thrift". 

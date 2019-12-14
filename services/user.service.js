@@ -240,7 +240,7 @@ module.exports = {
 		getPro: {
 			async handler(ctx) {
 				const {user_id} = ctx.params;
-				const user = await this.adapter.getById(user_id);
+				const user = await this.adapter.findById(user_id);
 
 				return _.pick(user, ["isPro"]);
 			}

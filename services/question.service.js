@@ -42,7 +42,10 @@ module.exports = {
 			params: {
 				survey_id: "string",
 				text: "string",
-				imageSrc: "string"
+				imageSrc: {
+					type: "string",
+					optional: true
+				}
 			},
 			async handler(ctx) {
 				const {survey_id, text, imageSrc} = ctx.params;
@@ -59,7 +62,10 @@ module.exports = {
 			params: {
 				question_id: "string",
 				text: "string",
-				imageSrc: "string"
+				imageSrc: {
+					type: "string",
+					optional: true
+				}
 			},
 			async handler(ctx) {
 				const { question_id, text, survey_id, imageSrc  } = ctx.params;

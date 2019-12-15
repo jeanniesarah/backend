@@ -214,6 +214,8 @@ module.exports = {
 		},
 		me: {
 			async handler(ctx) {
+				const user = ctx.meta.user;
+				user.isPro = user.isPro || false;
 				return ctx.meta.user;
 			}
 		},

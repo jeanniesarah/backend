@@ -39,9 +39,10 @@ module.exports = {
                 console.log('user', user)
                 return {
                     ...survey,
-                    questions: questions.map(({_id, text}) => ({
+                    questions: questions.map(({_id, text, imageSrc}) => ({
                         id: _id,
-                        text 
+                        text,
+                        imageSrc
                     })), 
                     user
                 };

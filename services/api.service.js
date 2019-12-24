@@ -46,6 +46,17 @@ module.exports = {
 				}
 			},
 			{
+				path: "/api/sprt",
+				aliases: {
+					"GET users": "user.listAll",
+				},
+				mappingPolicy: "restrict",
+				bodyParsers: {
+					json: true,
+					urlencoded: { extended: true }
+				}
+			},
+			{
 				path: "/api/survey",
 				aliases: {
 					"GET :survey_id": "survey.getById",

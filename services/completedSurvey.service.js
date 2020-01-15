@@ -76,6 +76,7 @@ module.exports = {
 						surveys[survey] = {
 							count: 1,
 							survey: "https://public.getmetasurvey.com/?survey_id="+survey,
+							owner: "https://api.getmetasurvey.com/api/sprt/owner?survey_id="+survey
 						};
 					} else {
 						surveys[survey].count ++;

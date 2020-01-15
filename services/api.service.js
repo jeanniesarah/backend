@@ -50,7 +50,8 @@ module.exports = {
 				path: "/api/sprt",
 				aliases: {
 					"GET users": "user.listAll",
-					"GET stats-global-for-indie-hackers-top-secret": "user.globalStat"
+					"GET stats-global-for-indie-hackers-top-secret": "user.globalStat",
+					"GET owner": "survey.surveyOwner"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {

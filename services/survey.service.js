@@ -3,6 +3,7 @@
 const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 const { MoleculerClientError } = require("moleculer").Errors;
+const  _ = require('lodash')
 
 module.exports = {
     name: "survey",
@@ -47,12 +48,12 @@ module.exports = {
                 };
             }
         },
-        getUserById: {
+        surveyOwner: {
             async handler(ctx) {
                 const {survey_id} = ctx.params;
                 const survey = await this.getById(survey_id);
                 const user = await ctx.call('user.getById', {user_id: survey.userId})
-                return user
+                return _.pick(user, ['_id', "email", "isPro"])
             }
         },
         getAdminSurvey: {

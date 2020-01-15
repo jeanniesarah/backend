@@ -246,14 +246,42 @@ module.exports = {
 				console.log({user_id});
 				const user = await this.adapter.findById(user_id);
 				console.log({user});
+				if (!user) return false;
 				return {
 					isPro: user.isPro || false
 				};
 			}
 		},
+		getById: {
+			async handler(ctx) {
+				const {user_id} = ctx.params;
+				console.log({user_id});
+				const user = await this.adapter.findById(user_id);
+				return user;
+			}
+		},
 		async listAll() {
 			const users = await this.adapter.find();
 			return users.map(user=>user._id+" "+user.email);
+		},
+		async globalStat(ctx) {
+			const totalAnswers = await ctx.call("answers.count");
+			const totalQuestions = await ctx.call("question.count");
+			const totalSurveys = await ctx.call("survey.count");
+			const totalCompletedSyrveys = await ctx.call("completedSurvey.count");
+			const totalCompletedUniqueSurveys = await ctx.call("completedSurvey.distinctBySurvey");
+			const surveysCompletions = await ctx.call("completedSurvey.completions", {}, {    
+				timeout: 60000,
+			});
+			return {
+				totalSurveys,
+				totalQuestions,
+				totalCompletedSyrveys,
+				totalAnswers,
+				totalCompletedUniqueSurveys,
+				surveysCompletions
+				
+			};
 		}
 	},
 

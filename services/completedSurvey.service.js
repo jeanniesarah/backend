@@ -3,6 +3,7 @@
 const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 const uuid = require("uuid");
+const _ = require("lodash");
 
 module.exports = {
 	name: "completedSurvey",
@@ -54,6 +55,34 @@ module.exports = {
 					},
 					fields: ["_id", "respondentUuid", "comment", "createdAt"]
 				});
+			}
+		},
+		distinctBySurvey: {
+			async handler(ctx) {
+				const all = await this.adapter.find();
+				const distinct = _.uniqBy(all, (item) => item.survey_id);
+				return distinct.length;
+			}
+		},
+		completions: {
+			async handler(ctx) {
+				console.log("completions");
+				const all = await this.adapter.find();
+				let surveys = {};
+				for (let complete of all) {
+					const survey = complete.survey_id;
+					if (survey == "null") continue;
+					if (!surveys[survey]) {
+						surveys[survey] = {
+							count: 1,
+							survey: "https://public.getmetasurvey.com/?survey_id="+survey,
+						};
+					} else {
+						surveys[survey].count ++;
+					}
+				}
+				surveys = _.sortBy(surveys, ["count", "survey"]);
+				return surveys;
 			}
 		}
 

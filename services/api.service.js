@@ -11,6 +11,7 @@ module.exports = {
 	// More info about settings: https://moleculer.services/docs/0.13/moleculer-web.html
 	settings: {
 		port: process.env.PORT || 3000,
+		httpServerTimeout: null,
 		cors: {
 			origin: "*",
 			methods: ["OPTIONS", "GET", "POST", "PUT", "DELETE", "PATCH"],
@@ -49,11 +50,15 @@ module.exports = {
 				path: "/api/sprt",
 				aliases: {
 					"GET users": "user.listAll",
+					"GET stats-global-for-indie-hackers-top-secret": "user.globalStat"
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {
 					json: true,
 					urlencoded: { extended: true }
+				},
+				callOptions: {
+					timeout: 60000
 				}
 			},
 			{

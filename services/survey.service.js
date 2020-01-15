@@ -31,12 +31,11 @@ module.exports = {
          */
         getById: {
             async handler(ctx) {
-                console.log('get bu id')
+                console.log('get buy id')
                 const {survey_id} = ctx.params;
                 const survey = await this.getById(survey_id);
                 const questions = await ctx.call('question.getBySurveyId', {survey_id});
                 const user = await ctx.call('user.getPro', {user_id: survey.userId})
-                console.log('user', user)
                 return {
                     ...survey,
                     questions: questions.map(({_id, text, imageSrc}) => ({
@@ -46,6 +45,14 @@ module.exports = {
                     })), 
                     user
                 };
+            }
+        },
+        getUserById: {
+            async handler(ctx) {
+                const {survey_id} = ctx.params;
+                const survey = await this.getById(survey_id);
+                const user = await ctx.call('user.getById', {user_id: survey.userId})
+                return user
             }
         },
         getAdminSurvey: {

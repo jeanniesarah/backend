@@ -66,12 +66,27 @@ module.exports = {
         },
         create: {
             params: {
-                title: "string"
+                title: "string",
+                footerHTML: {
+                    type: "string",
+                    optional: true
+                },
+                textQuestionLabel: {
+                    type: "string",
+                    optional: true
+                },
+                textQuestionPlaceholder: {
+                    type: "string",
+                    optional: true
+                }
             },
             async handler(ctx) {
-                const {title} = ctx.params;
+                const {title, footerHTML, textQuestionLabel, textQuestionPlaceholder} = ctx.params;
                 const new_survey = await this.adapter.insert({
                     title,
+                    footerHTML, 
+                    textQuestionLabel, 
+                    textQuestionPlaceholder,
                     userId: ctx.meta.user._id,
                     createdAt: new Date()
                 });
@@ -99,11 +114,11 @@ module.exports = {
 		},
         update: {
             async handler(ctx) {
-                const {survey_id, title} = ctx.params;
+                const {survey_id, title, footerHTML, textQuestionLabel, textQuestionPlaceholder} = ctx.params;
                 await ctx.call("survey.checkSurveyAccess", {survey_id});
                 await this.adapter.updateById(survey_id, {
                     $set: {
-                        title
+                        title, footerHTML, textQuestionLabel, textQuestionPlaceholder
                     }
                 });
             }

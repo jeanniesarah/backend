@@ -12,3 +12,8 @@
 - `npm test`: Run tests & generate coverage report
 - `npm run dc:up`: Start the stack with Docker Compose
 - `npm run dc:down`: Stop the stack with Docker Compose
+
+## GCP
+
+- go to https://console.cloud.google.com/ to configure or see status
+- builds automatically on push

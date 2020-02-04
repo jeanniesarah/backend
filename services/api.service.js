@@ -104,6 +104,7 @@ module.exports = {
 				path: "/api/analytic",
 				aliases: {
 					"GET answer": "analytic.getSurveyAnswer",
+					"GET /email/:survey_id": "analytic.getEmailBySurveyId",
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {

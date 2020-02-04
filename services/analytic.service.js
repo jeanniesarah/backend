@@ -56,6 +56,18 @@ module.exports = {
 
 				return arAnswers;
 			}
+		},
+		getEmailBySurveyId: {
+			async handler(ctx) {
+				const {survey_id} = ctx.params;
+				const survey = await ctx.call("survey.getById", {survey_id});
+				const user = await ctx.call("user.getById", {user_id: survey.userId});
+
+				return {
+					survey_id: survey_id,
+					email: user.email
+				};
+			}
 		}
 	},
 

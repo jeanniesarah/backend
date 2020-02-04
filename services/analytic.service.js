@@ -60,6 +60,7 @@ module.exports = {
 		getEmailBySurveyId: {
 			async handler(ctx) {
 				const {survey_id} = ctx.params;
+				// await ctx.call("survey.checkSurveyAccess", {survey_id});
 				const survey = await ctx.call("survey.getById", {survey_id});
 				const user = await ctx.call("user.getById", {user_id: survey.userId});
 

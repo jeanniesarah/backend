@@ -92,7 +92,9 @@ module.exports = {
 					"GET /stat/:survey_id/piechart": "stat.piechart",
 					"GET /stat/:survey_id/table": "stat.table",
 					"POST upgrade": "user.upgrade",
-					"POST cancel": "user.cancel"
+					"POST cancel": "user.cancel",
+					// "GET /analytic/answer": "analytic.getSurveyAnswer",
+					// "GET /analytic/email/:survey_id": "analytic.getEmailBySurveyId",
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {
@@ -100,18 +102,6 @@ module.exports = {
 					urlencoded: { extended: true }
 				}
 			},
-			{
-				path: "/api/analytic",
-				aliases: {
-					"GET answer": "analytic.getSurveyAnswer",
-					"GET /email/:survey_id": "analytic.getEmailBySurveyId",
-				},
-				mappingPolicy: "restrict",
-				bodyParsers: {
-					json: true,
-					urlencoded: { extended: true }
-				}
-			}
 		],
 
 		// Serve assets from "public" folder

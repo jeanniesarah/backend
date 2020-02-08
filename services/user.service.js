@@ -10,6 +10,8 @@ const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 const { MoleculerClientError } = require("moleculer").Errors;
 const _ = require("lodash");
+const Analytics = require("analytics-node");
+const analytics = new Analytics(process.env.SEGMENT_WRITE_KEY);
 
 module.exports = {
 	name: "user",
@@ -67,6 +69,20 @@ module.exports = {
 				});
 
 				const jwtToken = this.genToken(user._id);
+
+				const uid = user._id.toString();
+				analytics.identify({
+					userId: uid,
+					traits: {
+						email: email
+					},
+				});
+				analytics.track({
+					userId: uid,
+					event: "Registered",
+					timestamp: new Date(),
+				});
+
 				return {
 					jwtToken,
 					role: user.role
@@ -105,6 +121,20 @@ module.exports = {
 				const user = await this.checkAuthData(email, password);
 				this.logger.info({user});
 				const jwtToken = this.genToken(user._id);
+
+				const uid = user._id.toString();
+				analytics.identify({
+					userId: uid,
+					traits: {
+						email: email
+					},
+				});
+				analytics.track({
+					userId: uid,
+					event: "Login",
+					timestamp: new Date(),
+				});
+
 				return {
 					jwtToken,
 					role: user.role

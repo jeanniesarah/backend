@@ -4,6 +4,8 @@ const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 const uuid = require("uuid");
 const _ = require("lodash");
+const Analytics = require("analytics-node");
+const analytics = new Analytics(process.env.SEGMENT_WRITE_KEY);
 
 module.exports = {
 	name: "completedSurvey",
@@ -39,6 +41,24 @@ module.exports = {
 					comment,
 					createdAt: new Date(Date.now())
 				});
+				const user = await ctx.call("survey.surveyOwner", {survey_id: completedSurvey.survey_id});
+				const uid = user._id.toString();
+
+				analytics.identify({
+					userId: uid,
+					traits: {
+						email: user.email
+					},
+				});
+				analytics.track({
+					userId: uid,
+					event: "Completed survey",
+					properties: {
+						survey_id
+					},
+					timestamp: new Date(),
+				});
+
 				await ctx.call("answers.saveAnswers", {
 					completedSurvey_id: completedSurvey._id,
 					survey_id,

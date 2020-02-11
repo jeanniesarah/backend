@@ -70,18 +70,7 @@ module.exports = {
 
 				const jwtToken = this.genToken(user._id);
 
-				const uid = user._id.toString();
-				analytics.identify({
-					userId: uid,
-					traits: {
-						email: email
-					},
-				});
-				analytics.track({
-					userId: uid,
-					event: "Registered",
-					timestamp: new Date(),
-				});
+				this.setAnalytic({user}, "Registered");
 
 				return {
 					jwtToken,
@@ -122,18 +111,7 @@ module.exports = {
 				this.logger.info({user});
 				const jwtToken = this.genToken(user._id);
 
-				const uid = user._id.toString();
-				analytics.identify({
-					userId: uid,
-					traits: {
-						email: email
-					},
-				});
-				analytics.track({
-					userId: uid,
-					event: "Login",
-					timestamp: new Date(),
-				});
+				this.setAnalytic({user}, "Login");
 
 				return {
 					jwtToken,
@@ -252,6 +230,9 @@ module.exports = {
 		upgrade: {
 			async handler(ctx) {
 				const {user} = ctx.meta;
+
+				this.setAnalytic({user}, "Upgraded");
+
 				return await this.adapter.updateById(user._id, {
 					"$set": {
 						isPro: true
@@ -262,6 +243,9 @@ module.exports = {
 		cancel: {
 			async handler(ctx) {
 				const {user} = ctx.meta;
+
+				this.setAnalytic({user}, "Canceled");
+
 				return await this.adapter.updateById(user._id, {
 					"$set": {
 						isPro: false
@@ -364,6 +348,20 @@ module.exports = {
 				}
 				return user;
 			}
+		},
+		setAnalytic({user}, event) {
+			const uid = user._id.toString();
+			analytics.identify({
+				userId: uid,
+				traits: {
+					email: user.email
+				},
+			});
+			analytics.track({
+				userId: uid,
+				event,
+				timestamp: new Date(),
+			});
 		}
 	},
 

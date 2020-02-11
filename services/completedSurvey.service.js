@@ -42,22 +42,8 @@ module.exports = {
 					createdAt: new Date(Date.now())
 				});
 				const user = await ctx.call("survey.surveyOwner", {survey_id: completedSurvey.survey_id});
-				const uid = user._id.toString();
 
-				analytics.identify({
-					userId: uid,
-					traits: {
-						email: user.email
-					},
-				});
-				analytics.track({
-					userId: uid,
-					event: "Completed survey",
-					properties: {
-						survey_id
-					},
-					timestamp: new Date(),
-				});
+				this.setAnalytic({user}, "Completed survey", survey_id);
 
 				await ctx.call("answers.saveAnswers", {
 					completedSurvey_id: completedSurvey._id,
@@ -117,7 +103,25 @@ module.exports = {
 	/**
      * Methods
      */
-	methods: {},
+	methods: {
+		setAnalytic({user}, event, survey_id) {
+			const uid = user._id.toString();
+			analytics.identify({
+				userId: uid,
+				traits: {
+					email: user.email
+				},
+			});
+			analytics.track({
+				userId: uid,
+				event,
+				properties: {
+					survey_id
+				},
+				timestamp: new Date(),
+			});
+		}
+	},
 
 	/**
      * Service created lifecycle event handler

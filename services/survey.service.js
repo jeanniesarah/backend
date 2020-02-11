@@ -3,7 +3,9 @@
 const DbService = require("moleculer-db");
 const MongoDBAdapter = require("moleculer-db-adapter-mongo");
 const { MoleculerClientError } = require("moleculer").Errors;
-const  _ = require('lodash')
+const  _ = require('lodash');
+const Analytics = require("analytics-node");
+const analytics = new Analytics(process.env.SEGMENT_WRITE_KEY);
 
 module.exports = {
     name: "survey",
@@ -90,6 +92,9 @@ module.exports = {
                     userId: ctx.meta.user._id,
                     createdAt: new Date()
                 });
+
+                this.setAnalytic({user: ctx.meta.user}, "Created survey", new_survey._id.toString());
+
                 return new_survey;
             }
         },
@@ -121,6 +126,7 @@ module.exports = {
                         title, footerHTML, textQuestionLabel, textQuestionPlaceholder
                     }
                 });
+                this.setAnalytic({user: ctx.meta.user}, "Updated survey", survey_id);
             }
         },
         delete: {
@@ -159,7 +165,25 @@ module.exports = {
     /**
      * Methods
      */
-    methods: {},
+    methods: {
+        setAnalytic({user}, event, survey_id) {
+            const uid = user._id.toString();
+            analytics.identify({
+                userId: uid,
+                traits: {
+                    email: user.email
+                },
+            });
+            analytics.track({
+                userId: uid,
+                event,
+                properties: {
+                    survey_id
+                },
+                timestamp: new Date(),
+            });
+        }
+    },
 
     /**
      * Service created lifecycle event handler

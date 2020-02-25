@@ -93,8 +93,6 @@ module.exports = {
 					"GET /stat/:survey_id/table": "stat.table",
 					"POST upgrade": "user.upgrade",
 					"POST cancel": "user.cancel",
-					// "GET /analytic/answer": "analytic.getSurveyAnswer",
-					// "GET /analytic/email/:survey_id": "analytic.getEmailBySurveyId",
 				},
 				mappingPolicy: "restrict",
 				bodyParsers: {

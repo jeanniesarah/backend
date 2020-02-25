@@ -75,10 +75,17 @@ module.exports = {
 							value: true
 						}
 					});
+					const noCount = await ctx.call("answers.count", {
+						query: {
+							questionId: question._id,
+							value: false
+						}
+					});
 					chart.push({
 						_id: question._id,
 						text: question.text,
-						yesCount
+						yesCount,
+						noCount
 					});
 				}
 				return chart;

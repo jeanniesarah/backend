@@ -54,10 +54,12 @@ module.exports = {
 		},
 		getForSurvey: {
 			async handler(ctx) {
-				const {survey_id, page, pageSize} = ctx.params;
+				const {survey_id, page, pageSize, noEmpty} = ctx.params;
+				this.logger.info(ctx.params);
 				const completedSurveys = await ctx.call("completedSurvey.list", {
 					query: {
 						survey_id: survey_id,
+						comment: (noEmpty === "true") ? {"$ne": ""} : {$exists: true}
 					},
 					fields: ["_id", "respondentUuid", "comment", "createdAt"],
 					page: page ? page : 1,

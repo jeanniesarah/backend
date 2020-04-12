@@ -28,10 +28,10 @@ module.exports = {
 	actions: {
 		table: {
 			async handler(ctx) {
-				const {survey_id, page, pageSize} = ctx.params;
+				const {survey_id, page, pageSize, noEmpty} = ctx.params;
 				await ctx.call("survey.checkSurveyAccess", {survey_id});
 				const questions = await ctx.call("question.getBySurveyId", {survey_id});
-				const {pageInfo, completedSurveys} = await ctx.call("completedSurvey.getForSurvey", {survey_id, page, pageSize});
+				const {pageInfo, completedSurveys} = await ctx.call("completedSurvey.getForSurvey", {survey_id, page, pageSize, noEmpty});
 				const results = [];
 				// console.log({completedSurveys});
 				for (let completedSurvey of completedSurveys) {

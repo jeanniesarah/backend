@@ -54,13 +54,24 @@ module.exports = {
 		},
 		getForSurvey: {
 			async handler(ctx) {
-				const {survey_id} = ctx.params;
-				return await ctx.call("completedSurvey.find", {
+				const {survey_id, page, pageSize} = ctx.params;
+				const completedSurveys = await ctx.call("completedSurvey.list", {
 					query: {
 						survey_id: survey_id,
 					},
-					fields: ["_id", "respondentUuid", "comment", "createdAt"]
+					fields: ["_id", "respondentUuid", "comment", "createdAt"],
+					page: page ? page : 1,
+					pageSize: pageSize ? pageSize : 20,
 				});
+				return {
+					pageInfo: {
+						total: completedSurveys.total,
+						page: completedSurveys.page,
+						pageSize: completedSurveys.pageSize,
+						totalPages: completedSurveys.totalPages,
+					},
+					completedSurveys: completedSurveys.rows
+				};
 			}
 		},
 		distinctBySurvey: {
